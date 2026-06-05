@@ -9,9 +9,10 @@ export const supabase = createClient(
   supabaseAnonKey || 'placeholder'
 )
 
+// anon key is sufficient — write endpoint is protected by CRON_SECRET
 export const supabaseAdmin = createClient(
   supabaseUrl || 'https://placeholder.supabase.co',
-  supabaseServiceKey || 'placeholder'
+  supabaseAnonKey || 'placeholder'
 )
 
 export type NewsArticle = {
