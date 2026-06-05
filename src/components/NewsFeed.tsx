@@ -58,11 +58,15 @@ export default function NewsFeed() {
     try {
       const res = await fetch('/api/cron/collect')
       const data = await res.json()
-      if (data.saved > 0) {
+      if (data.error) {
+        alert(`오류: ${data.error}`)
+        return
+      }
+      if ((data.saved ?? 0) > 0) {
         await fetchNews(1, source, query)
         setPage(1)
       }
-      alert(`수집 완료: ${data.saved}개 저장, ${data.skipped}개 스킵`)
+      alert(`수집 완료: ${data.saved ?? 0}개 저장, ${data.skipped ?? 0}개 스킵, ${data.errors ?? 0}개 오류`)
     } catch {
       alert('수집 중 오류가 발생했습니다.')
     } finally {

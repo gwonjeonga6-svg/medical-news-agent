@@ -6,11 +6,11 @@ import { supabaseAdmin } from '@/lib/supabase'
 export const maxDuration = 300
 
 export async function GET(request: NextRequest) {
+  // Vercel cron sends Bearer token; direct browser calls are allowed (public RSS data)
   const authHeader = request.headers.get('authorization')
-  if (
-    process.env.CRON_SECRET &&
-    authHeader !== `Bearer ${process.env.CRON_SECRET}`
-  ) {
+  const isVercelCron = authHeader === `Bearer ${process.env.CRON_SECRET}`
+  const isDirectCall = !authHeader
+  if (!isVercelCron && !isDirectCall) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
